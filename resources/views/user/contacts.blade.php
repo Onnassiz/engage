@@ -8,8 +8,14 @@ $viewData = [
 @extends('layouts.userMaster')
 @section('content')
 
-
     <div class="container page-body">
+        @if(Session::has('global'))
+            <div class="alert alert-success">
+                <ul style="list-style: none">
+                    <li>{{ Session::get('global') }}</li>
+                </ul>
+            </div>
+        @endif
         <div class="row">
             @if(Session::has('message'))
                 <div class="alert alert-success">
@@ -80,20 +86,39 @@ $viewData = [
                     <div style="padding: 30px">
                         <table class="table contacts" style="color: rgba(0, 0, 0, 0.6);">
                             @foreach($contacts as $contact)
+                                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="{{ 'deleteContactModal'.$contact->id }}">
+                                    <div class="modal-dialog modal-md">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                <h4 class="modal-title">Confirm Delete</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div>
+                                                    <p>You are about to delete <b>{{ $contact->surname.' '.$contact->firstname }}</b> from your contact list.</p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                                                <button data="{{ $contact->id }}" type="button" class="btn btn-default continueDelete" data-dismiss="modal">Continue</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <tr>
                                     <td>
-                                        <a href="{{ '/contacts/'.$contact->id }}">{{ $contact->firstname.' '.$contact->surname }}</a><br>
+                                        <a href="{{ '/contacts/'.$contact->key }}">{{ $contact->firstname.' '.$contact->surname }}</a><br>
                                         {{ $contact->rank.' at' }}
                                         <a href="#">{{ \App\Organization::whereId(\App\ContactOrganization::whereContactId($contact->id)->first()->organization_id)->first()->organization }}</a>
                                     </td>
                                     <td>
-                                        <a href="{{ '/contacts/'.$contact->id }}">{{ $contact->email_1 }}</a><br>
+                                        <a href="{{ '/contacts/'.$contact->key }}">{{ $contact->email_1 }}</a><br>
                                         {{ $contact->telephone_1.' ' }}
                                         {{ $contact->telephone_2 }}
                                     </td>
                                     <td>
-                                        <a href="{{ '/contacts/'.$contact->id }}" title="view"><i class="fa fa-eye"></i></a>&nbsp;&nbsp;&nbsp;
-                                        <a href="#" title="edit"><i class="fa fa-pencil"></i></a>
+                                        <a href="#" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;
+                                        <a href="#" class="deleteContact" data="{{ $contact->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -104,3 +129,23 @@ $viewData = [
         </div>
     </div>
 @endsection
+@section('scripts')
+    <script>
+        $('.deleteContact').click(
+                function () {
+                    var id = $(this).attr('data');
+                    $('#deleteContactModal'+id).modal({
+                        show: true
+                    });
+                }
+        );
+        $('.continueDelete').click(
+                function () {
+                    $(this).attr('disabled','disabled');
+                    var id = $(this).attr('data');
+                    window.location.replace('http://engage.dev/contacts/delete/'+id);
+                }
+        );
+    </script>
+@endsection
+

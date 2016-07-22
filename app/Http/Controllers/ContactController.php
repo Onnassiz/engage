@@ -47,20 +47,20 @@ class ContactController extends Controller
         return view('user.createContact')->with('states', $states);
     }
 
-    private function validateRequest($data){
+    public function postCreate(Request $request) {
+        date_default_timezone_set('Africa/Lagos');
         $messages = [
             'email_1.required'  => 'At least one email address required.',
             'email_2.different' => 'The first and second (optional) email must be different.',
             'phone_1.required'  => 'At least one phone number required.',
             'phone_2.different' => 'The first and second phone number must be different.',
             'tags.required'     => 'At least one tag is required. A tag could be the the contact\'s department, office, likes and interest, bands, etc.',
-            'key.unique'        => 'The email address '.'\''.$data->email_1.'\' '.'has already been mapped to this organization. Use a different email address or organization.'
+            'key.unique'        => 'The email address '.'\''.$request->email_1.'\' '.'has already been mapped to this organization. Use a different email address or organization.'
         ];
 
-        $request['key'] = $data->email_1.$data->organization;
+        $request['key'] = $request->email_1.$request->organization;
 
-
-        $this->validate($data,[
+        $this->validate($request,[
             'key'               => 'unique:contacts,key',
             'tags'              => 'required',
             'firstName'         => 'required',
@@ -76,11 +76,6 @@ class ContactController extends Controller
             'phone_1'           => 'required',
             'phone_2'           => 'different:phone_1',
         ], $messages);
-    }
-
-    public function postCreate(Request $request) {
-        date_default_timezone_set('Africa/Lagos');
-        $this->validateRequest($request);
         $contact = Contacts::create([
             'key'               => $request['email_1'].$request['organization'],
             'user_id'           => Auth::user()->id,
@@ -130,11 +125,13 @@ class ContactController extends Controller
 
         $media = $request->media;
 
-        foreach($media as $m){
-            Media::create([
-                'media'         => $m,
-                'contact_id'    => $contact->id,
-            ]);
+        if(count($media)){
+            foreach($media as $m){
+                Media::create([
+                    'media'         => $m,
+                    'contact_id'    => $contact->id,
+                ]);
+            }
         }
 
         if($request['next'] != 'Insert a new contact'){
@@ -169,8 +166,36 @@ class ContactController extends Controller
         }
     }
 
-    public function viewContact($id) {
+    public function viewContact($key) {
+        $contact = Contacts::whereKey($key)->first();
+
+        if(count($contact)){
+            if($contact->user_id != Auth::user()->id){
+                return redirect()->back();
+            }
+
+            $tag_ids = ContactTags::whereContactId($contact->id)->pluck('tag_id');
+
+            foreach($tag_ids as $tag_id){
+                $tags[] = Tags::whereId($tag_id)->first()->tags;
+            }
+
+            $medias = Media::whereContactId($contact->id)->pluck('media');
+            return view('user.viewContact')->with('contact', $contact)->with('tags', $tags)->with('medias', $medias);
+        }
+
+        return redirect()->back();
+    }
+
+    public function deleteContact($id){
         $contact = Contacts::find($id);
-        return view('user.viewContact')->with('contact', $contact);
+        if($contact->user_id != Auth::user()->id){
+            return redirect()->back();
+        }
+        ContactTags::whereContactId($id)->delete();
+        ContactOrganization::whereContactId($id)->delete();
+        Contacts::find($id)->delete();
+
+        return redirect()->to('/contacts')->with('global', $contact->surname.' '.$contact->firstname.' has been deleted successfully');
     }
 }

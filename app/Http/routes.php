@@ -23,4 +23,5 @@ Route::get('/contacts/autocomplete', 'ContactController@tagsAutocomplete');
 Route::get('/contacts/organization', 'ContactController@organization');
 Route::get('/contacts/create', 'ContactController@create');
 Route::post('/contacts/create', 'ContactController@postCreate');
-Route::get('/contacts/{id}', 'ContactController@viewContact');
+Route::get('/contacts/{key}', 'ContactController@viewContact');
+Route::get('/contacts/delete/{id}', 'ContactController@deleteContact');
