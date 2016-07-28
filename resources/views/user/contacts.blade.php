@@ -55,7 +55,7 @@ $viewData = [
 
             <div class="col-md-6" style="padding-top: 10%;">
                 <a href="{{ url('/contacts/create') }}" class="btn btn-default">Add a contact</a>
-                <a href="{{ url('/contacts/import') }}" class="btn btn-default">Import your contacts</a>
+                <a href="{{ url('/contacts/importAndExport') }}" class="btn btn-default">Import your contacts</a>
             </div>
         </div>
         <div class="row" style="margin-top: 40px;">
@@ -117,7 +117,7 @@ $viewData = [
                                         {{ $contact->telephone_2 }}
                                     </td>
                                     <td>
-                                        <a href="#" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;
+                                        <a href="{{ '/contacts/edit/'.$contact->key }}" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;
                                         <a href="#" class="deleteContact" data="{{ $contact->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>

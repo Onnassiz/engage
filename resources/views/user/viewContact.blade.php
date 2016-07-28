@@ -32,7 +32,7 @@ $viewData = [
 <div class="container page-body">
     <div class="row">
         <div class="col-md-12" style="margin-bottom: 10px;text-align: right">
-            <a href="#"><i class="fa fa-edit"></i> Edit</a>&nbsp;&nbsp;&nbsp;
+            <a href="{{ '/contacts/edit/'.$contact->key }}"><i class="fa fa-edit"></i> Edit</a>&nbsp;&nbsp;&nbsp;
             <a href="#" id="deleteContact" data="{{ $contact->id }}"><i class="fa fa-trash"></i> Delete</a>
         </div>
     </div>
@@ -73,6 +73,14 @@ $viewData = [
                     </div>
                     <div class="col-md-3">
                         {{ ucwords($contact->sex) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        Organization
+                    </div>
+                    <div class="col-md-3">
+                        {{ \App\Organization::find(\App\ContactOrganization::whereContactId($contact->id)->first()->organization_id)->organization }}
                     </div>
                 </div>
                 <div class="row">

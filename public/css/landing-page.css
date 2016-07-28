@@ -397,3 +397,10 @@ form-group button{
 .contacts th, .contacts td {
     border: 1px !important;
 }
+.import-link{
+    color: rgba(0, 0, 0, 0.6);
+}
+.import-link:hover{
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+}
