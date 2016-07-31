@@ -22,7 +22,7 @@ class ContactController extends Controller
         $this->middleware('auth');
     }
 
-    public function index() {
+    public function home() {
         $contacts = Contacts::whereUserId(Auth::user()->id)->orderBy('updated_at', 'desc')->get();
         return view('user.contacts')->with('contacts', $contacts);
     }

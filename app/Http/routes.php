@@ -20,13 +20,15 @@ Route::post('/profile', 'UserController@postProfile');
 
 Route::get('/contacts/importAndExport', 'ImportContact@index');
 Route::get('/contacts/importFileExample', 'ImportContact@downloadExample');
+Route::get('/contacts/import', 'ImportContact@getImportContact');
+Route::post('/contacts/import', 'ImportContact@postImportContact');
 
-Route::get('/contacts', 'ContactController@index');
+Route::get('/contacts', 'ContactController@home');
 Route::get('/contacts/autocomplete', 'ContactController@tagsAutocomplete');
 Route::get('/contacts/organization', 'ContactController@organization');
 Route::get('/contacts/create', 'ContactController@create');
 Route::post('/contacts/create', 'ContactController@postCreate');
-Route::get('/contacts/{key}', 'ContactController@viewContact');
+Route::get('/contacts/view/{key}', 'ContactController@viewContact');
 Route::get('/contacts/delete/{id}', 'ContactController@deleteContact');
 Route::get('/contacts/edit/{key}', 'ContactController@editContact');
 Route::post('/contacts/edit/{key}', 'ContactController@postEditContact');

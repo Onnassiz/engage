@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ImportContact extends Controller
 {
@@ -17,6 +18,16 @@ class ImportContact extends Controller
     }
 
     public function downloadExample() {
-        return response()->download('http://engage.dev/samples/contacts.csv');
+        return response()->download(public_path('samples/contacts.csv'));
+    }
+
+    public function getImportContact() {
+        return view('user.import')->with('option', 'first');
+    }
+
+    public function postImportContact(Request $request) {
+        $csv = $request->file('csv');
+        return $csv;
+//        return view('user.import')->with('option','second');
     }
 }

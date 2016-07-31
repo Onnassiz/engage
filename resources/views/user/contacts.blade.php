@@ -107,12 +107,12 @@ $viewData = [
                                 </div>
                                 <tr>
                                     <td>
-                                        <a href="{{ '/contacts/'.$contact->key }}">{{ $contact->firstname.' '.$contact->surname }}</a><br>
+                                        <a href="{{ '/contacts/view/'.$contact->key }}">{{ $contact->firstname.' '.$contact->surname }}</a><br>
                                         {{ $contact->rank.' at' }}
                                         <a href="#">{{ \App\Organization::whereId(\App\ContactOrganization::whereContactId($contact->id)->first()->organization_id)->first()->organization }}</a>
                                     </td>
                                     <td>
-                                        <a href="{{ '/contacts/'.$contact->key }}">{{ $contact->email_1 }}</a><br>
+                                        <a href="{{ '/contacts/view/'.$contact->key }}">{{ $contact->email_1 }}</a><br>
                                         {{ $contact->telephone_1.' ' }}
                                         {{ $contact->telephone_2 }}
                                     </td>

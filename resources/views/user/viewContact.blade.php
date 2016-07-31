@@ -2,7 +2,7 @@
 <?php
 use App\Contacts;
 $viewData = [
-        'page' => 'home',
+        'page' => 'contacts',
         'pageTitle' => $contact->surname.' | Engage',
 ]
 ?>
