@@ -20,7 +20,7 @@ Route::post('/profile', 'UserController@postProfile');
 
 Route::get('/contacts/importAndExport', 'ImportContact@index');
 Route::get('/contacts/importFileExample', 'ImportContact@downloadExample');
-Route::get('/contacts/import', 'ImportContact@getImportContact');
+Route::get('/contacts/import/{option}', 'ImportContact@getImportContact');
 Route::post('/contacts/import', 'ImportContact@postImportContact');
 
 Route::get('/contacts', 'ContactController@home');
@@ -32,4 +32,8 @@ Route::get('/contacts/view/{key}', 'ContactController@viewContact');
 Route::get('/contacts/delete/{id}', 'ContactController@deleteContact');
 Route::get('/contacts/edit/{key}', 'ContactController@editContact');
 Route::post('/contacts/edit/{key}', 'ContactController@postEditContact');
+
+Route::get('/table', function(){
+   return view('user.table');
+});
 

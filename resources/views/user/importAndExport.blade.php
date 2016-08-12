@@ -15,7 +15,7 @@ $viewData = [
         <hr class="intro-divider">
         <div class="col-md-6">
             <div style="margin-top: 30px;color: rgba(0, 0, 0, 0.6);">
-                <a href="{{ '/contacts/import' }}" class="import-link">
+                <a href="{{ '/contacts/import/upload' }}" class="import-link">
                     <div style="margin-top: 20px; margin-bottom: 20px">
                         <span class="pull-left" style="font-size: 30px"><i class="fa fa-btn fa-upload"></i></span>
                         <span>
