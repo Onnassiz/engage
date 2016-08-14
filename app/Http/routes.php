@@ -22,6 +22,8 @@ Route::get('/contacts/importAndExport', 'ImportContact@index');
 Route::get('/contacts/importFileExample', 'ImportContact@downloadExample');
 Route::get('/contacts/import/{option}', 'ImportContact@getImportContact');
 Route::post('/contacts/import', 'ImportContact@postImportContact');
+Route::get('/contacts/postImport', 'ImportContact@jsonImportContact');
+Route::get('/contacts/getUploaded', 'ImportContact@getUploaded');
 
 Route::get('/contacts', 'ContactController@home');
 Route::get('/contacts/autocomplete', 'ContactController@tagsAutocomplete');

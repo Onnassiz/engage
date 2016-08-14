@@ -33,13 +33,30 @@ class ImportContact extends Controller
             'import',
             'review',
         ];
+        $selectItems = [
+            ['firstname', 'First name'],
+            ['surname', 'Surname'],
+            ['state_of_origin', 'State of origin'],
+            ['sex', 'Sex'],
+            ['organization', 'Organization or Company'],
+            ['rank', 'Function or Rank'],
+            ['current_city', 'Current city'],
+            ['current_state', 'Current state'],
+            ['email_1', 'First Email'],
+            ['email_2', 'Second Email'],
+            ['telephone_1', 'Phone 1'],
+            ['telephone_2', 'Phone 2'],
+            ['periodicity', 'Periodicity'],
+            ['media', 'Media'],
+            ['tags', 'Tags'],
+        ];
 
-        $contacts = ContactTemp::where('user_id', '=', Auth::user()->id)->get()->take(15);
+        $contacts = ContactTemp::where('user_id', '=', Auth::user()->id)->get();
 
         if(!in_array($option, $list)){
             return back();
         }
-        return view('user.import')->with('option', $option)->with('contacts', $contacts);
+        return view('user.import')->with('option', $option)->with('contacts', $contacts)->with('selectItems', $selectItems);
     }
 
     public function isEmptyArr($array) {
@@ -116,5 +133,37 @@ class ImportContact extends Controller
         }
 
         return Redirect::to('/contacts/import/match');
+    }
+
+    public function getUploaded(Request $request) {
+        if($request->ajax()){
+            $contacts = ContactTemp::where('user_id', '=', Auth::user()->id)->get();
+
+            return response()->json($contacts);
+        }
+    }
+
+    public function jsonImportContact(Request $request) {
+        if($request->ajax()){
+            $contact = $request->contact;
+
+            $this->validate($contact, [
+                'key'               => 'unique:contacts,key',
+                'tags'              => 'required',
+                'firstName'         => 'required',
+                'surname'           => 'required',
+                'state_of_origin'   => 'required|exists:states,state',
+                'sex'               => 'required',
+                'organization'      => 'required',
+                'function'          => 'required',
+                'current_city'      => 'required',
+                'current_state'     => 'required|exists:states,state',
+                'email_1'           => 'required',
+                'email_2'           => 'different:email_1',
+                'telephone_1'       => 'required',
+                'telephone_2'       => 'different:phone_1',
+            ]);
+            return response()->json($contact);
+        }
     }
 }

@@ -88,9 +88,9 @@ $viewData = [
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane {{ ($option == 'match')?'active':'' }}">
-                    <div style="width: 100%; overflow: auto">
-                        <table class="table table-bordered" style="table-layout: fixed;width: 3500px">
-                            <tr class="thead">
+                    <div style="width: 100%; max-height: 350px; overflow: auto">
+                        <table class="table table-bordered" style="table-layout: fixed;width: 3500px; height: 600px">
+                            <tr class="thead active">
                                 <th>firstname</th>
                                 <th>surname</th>
                                 <th>state_of_origin</th>
@@ -107,7 +107,7 @@ $viewData = [
                                 <th>media</th>
                                 <th>tags</th>
                             </tr>
-                            <tr class="thead">
+                            <tr class="thead active">
                                 <td>Import as</td>
                                 <td>Import as</td>
                                 <td>Import as</td>
@@ -124,29 +124,127 @@ $viewData = [
                                 <td>Import as</td>
                                 <td>Import as</td>
                             </tr>
-                            <tr class="thead">
+                            <tr class="thead active">
                                 <td>
                                     <select class="selectpicker" name="1">
-                                        <option value="One">You</option>
-                                        <option value="One">You</option>
-                                        <option value="One">You</option>
-                                        <option value="One">You</option>
+                                        <option value="firstname" selected>First name</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
                                     </select>
                                 </td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
-                                <td>Import as</td>
+                                <td>
+                                    <select class="selectpicker" name="2">
+                                        <option value="surname" selected>Surname</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="3">
+                                        <option value="state_of_origin">State of origin</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="4">
+                                        <option value="sex" selected>Sex</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="5">
+                                        <option value="organization" selected>Organization or Company</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="6">
+                                        <option value="rank" selected>Function or Rank</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="7">
+                                        <option value="current_city" selected>Current city</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="8">
+                                    <option value="current_state" selected>Current state</option>
+                                    @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="9">
+                                        <option value="email_1" selected>First Email</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="10">
+                                        <option value="email_2" selected>Second Email</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="11">
+                                        <option value="telephone_1" selected>Phone 1</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="12">
+                                        <option value="telephone_2" selected>Phone 2</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="13">
+                                        <option value="periodicity" selected>Periodicity</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="14">
+                                        <option value="media" selected>Media</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="selectpicker" name="15">
+                                        <option value="tags" selected>Tags</option>
+                                        @foreach($selectItems as $selectItem)
+                                            <option value="{{ $selectItem[0] }}">{{ $selectItem[1] }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
                             </tr>
                             @foreach($contacts as $contact)
                             <tr>
@@ -169,6 +267,23 @@ $viewData = [
                             @endforeach
                         </table>
                     </div>
+                    <div>
+                        <h3>Preview contacts</h3>
+                    </div>
+                    <div class="pull-right" style="margin-bottom: 10px">
+                        <button class="btn btn-primary" id="startImport">Import</button>
+                        <div id="show"></div>
+
+                        <input type="hidden" value="{{ $contacts }}" id="contacts">
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="" id="progress">
+                            <span id="progress-body"></span>
+                        </div>
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="messages">...</div>
                 <div role="tabpanel" class="tab-pane" id="settings">...</div>
@@ -180,4 +295,5 @@ $viewData = [
 
 @section('scripts')
     <script src="{{ asset('js/bootstrap-select.js') }}"></script>
+    <script src="{{ asset('js/import.js') }}"></script>
 @endsection
