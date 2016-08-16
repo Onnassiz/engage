@@ -14,6 +14,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
+                <li class="@if($viewData['page'] == 'sendPr') active @endif">
+                    <a href="{{ url('/publication') }}">Publications</a>
+                </li>
                 <li class="@if($viewData['page'] == 'contacts') active @endif">
                     <a href="{{ url('/contacts') }}">Contacts</a>
                 </li>

@@ -71,10 +71,9 @@ class ContactController extends Controller
             'function'          => 'required',
             'current_city'      => 'required',
             'current_state'     => 'required|exists:states,state',
-            'email_1'           => 'required',
-            'email_2'           => 'different:email_1',
+            'email_1'           => 'required|email',
+            'email_2'           => 'email|different:email_1',
             'phone_1'           => 'required',
-            'phone_2'           => 'different:phone_1',
         ], $messages);
 
         $contact = Contacts::create([
@@ -96,6 +95,7 @@ class ContactController extends Controller
 
         $tags = explode(',', $request['tags']);
         foreach($tags as $tag){
+            $tag = trim($tag);
             $query = Tags::where('tags', '=', $tag)->first();
             if(!$query){
                 Tags::create([

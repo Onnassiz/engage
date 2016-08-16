@@ -15,11 +15,13 @@ class CreateContactsTable extends Migration
         Schema::create('contacts', function(Blueprint $table){
             $table->increments('id');
             $table->string('key')->unique();
-            $table->integer('user_id')->unsigned();
+            $table->integer('number',false,true)->null();
+            $table->integer('user_id',false,true);
+            $table->string('filter');
             $table->string('firstname');
             $table->string('surname');
             $table->string('state_of_origin');
-            $table->enum('sex',['male', 'female']);
+            $table->enum('sex',['Male', 'Female']);
             $table->string('rank');
             $table->string('current_city');
             $table->string('current_state');

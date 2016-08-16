@@ -24,6 +24,8 @@ Route::get('/contacts/import/{option}', 'ImportContact@getImportContact');
 Route::post('/contacts/import', 'ImportContact@postImportContact');
 Route::get('/contacts/postImport', 'ImportContact@jsonImportContact');
 Route::get('/contacts/getUploaded', 'ImportContact@getUploaded');
+Route::get('/contacts/setHeaders', 'ImportContact@setHeaders');
+Route::get('/contacts/cancelAndReturn', 'ImportContact@cancel');
 
 Route::get('/contacts', 'ContactController@home');
 Route::get('/contacts/autocomplete', 'ContactController@tagsAutocomplete');

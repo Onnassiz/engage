@@ -11,6 +11,10 @@ use Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use App\ContactTags;
 use Auth;
+use App\Tags;
+use App\Media;
+use App\Organization;
+use App\ContactOrganization;
 
 class ImportContact extends Controller
 {
@@ -22,6 +26,12 @@ class ImportContact extends Controller
         return view('user.importAndExport');
     }
 
+    public function cancel() {
+        ContactTemp::where('user_id','=',Auth::user()->id)->delete();
+
+        return redirect()->to('/contacts/import/upload');
+    }
+
     public function downloadExample() {
         return response()->download(public_path('samples/contacts.csv'));
     }
@@ -30,33 +40,15 @@ class ImportContact extends Controller
         $list = [
             'upload',
             'match',
-            'import',
+            'main',
             'review',
         ];
-        $selectItems = [
-            ['firstname', 'First name'],
-            ['surname', 'Surname'],
-            ['state_of_origin', 'State of origin'],
-            ['sex', 'Sex'],
-            ['organization', 'Organization or Company'],
-            ['rank', 'Function or Rank'],
-            ['current_city', 'Current city'],
-            ['current_state', 'Current state'],
-            ['email_1', 'First Email'],
-            ['email_2', 'Second Email'],
-            ['telephone_1', 'Phone 1'],
-            ['telephone_2', 'Phone 2'],
-            ['periodicity', 'Periodicity'],
-            ['media', 'Media'],
-            ['tags', 'Tags'],
-        ];
-
         $contacts = ContactTemp::where('user_id', '=', Auth::user()->id)->get();
 
         if(!in_array($option, $list)){
             return back();
         }
-        return view('user.import')->with('option', $option)->with('contacts', $contacts)->with('selectItems', $selectItems);
+        return view('user.import')->with('option', $option)->with('contacts', $contacts);
     }
 
     public function isEmptyArr($array) {
@@ -103,7 +95,9 @@ class ImportContact extends Controller
 
         return $status;
     }
+
     public function postImportContact(Request $request) {
+        ContactTemp::where('user_id','=',Auth::user()->id)->delete();
         $csv = $request->file('csv');
         $ext = $csv->getClientOriginalExtension();
 
@@ -124,8 +118,11 @@ class ImportContact extends Controller
         }
 
         $contacts = $data->toArray();
+        $count = 1;
 
         foreach($contacts as $contact){
+            $count++;
+            $contact['number'] = $count;
             if(!$this->isEmptyArr($contact)){
                 $contact['user_id'] = Auth::user()->id;
                 ContactTemp::create($contact);
@@ -145,9 +142,8 @@ class ImportContact extends Controller
 
     public function jsonImportContact(Request $request) {
         if($request->ajax()){
-            $contact = $request->contact;
 
-            $this->validate($contact, [
+            $this->validate($request, [
                 'key'               => 'unique:contacts,key',
                 'tags'              => 'required',
                 'firstName'         => 'required',
@@ -158,12 +154,105 @@ class ImportContact extends Controller
                 'function'          => 'required',
                 'current_city'      => 'required',
                 'current_state'     => 'required|exists:states,state',
-                'email_1'           => 'required',
-                'email_2'           => 'different:email_1',
-                'telephone_1'       => 'required',
-                'telephone_2'       => 'different:phone_1',
+                'email_1'           => 'required|email',
+                'email_2'           => 'email|different:email_1',
+                'phone_1'           => 'required',
+                'periodicity'       => 'required'
             ]);
-            return response()->json($contact);
+
+            $contact = Contacts::create([
+                'key'               => $request['key'],
+                'user_id'           => Auth::user()->id,
+                'number'            => $request['number'],
+                'filter'            => 'Last imported',
+                'firstname'         => $request['firstName'],
+                'surname'           => $request['surname'],
+                'state_of_origin'   => $request['state_of_origin'],
+                'sex'               => $request['sex'],
+                'rank'              => $request['function'],
+                'current_city'      => $request['current_city'],
+                'current_state'     => $request['current_state'],
+                'email_1'           => $request['email_1'],
+                'email_2'           => $request['email_2'],
+                'telephone_1'       => $request['phone_1'],
+                'telephone_2'       => $request['phone_2'],
+                'periodicity'       => $request['periodicity'],
+            ]);
+
+
+            $tags = explode(',', $request['tags']);
+            foreach($tags as $tag){
+                $tag = trim($tag);
+                $query = Tags::where('tags', '=', $tag)->first();
+                if(!$query){
+                    Tags::create([
+                        'tags'      => $tag,
+                        'user_id'   => Auth::user()->id,
+                    ]);
+                }
+
+                ContactTags::create([
+                    'tag_id'        => Tags::where('tags', '=', $tag)->first()->id,
+                    'contact_id'    => $contact->id,
+                ]);
+            }
+
+            $media = $request['media'];
+
+            if(count($media)){
+                $media = explode(',', $media);
+                foreach($media as $m){
+                    $m = trim($m);
+                    Media::create([
+                        'media'         => $m,
+                        'contact_id'    => $contact->id,
+                    ]);
+                }
+            }
+
+            $organization = $request['organization'];
+            $query = Organization::where('organization', '=', $organization)->first();
+
+            if(!$query){
+                Organization::create([
+                    'organization'  => $organization,
+                    'user_id'       => Auth::user()->id,
+                ]);
+            }
+            ContactOrganization::create([
+                'organization_id'       => Organization::where('organization', '=', $organization)->first()->id,
+                'contact_id'            => $contact->id,
+            ]);
+
+
+            ContactTemp::find($request->input('id'))->delete();
+            return $request->input('key');
+        }
+    }
+
+    public function setHeaders(Request $request) {
+        if($request->ajax()){
+            $arr = [
+                $request[0],
+                $request[1],
+                $request[2],
+                $request[3],
+                $request[4],
+                $request[5],
+                $request[6],
+                $request[7],
+                $request[8],
+                $request[9],
+                $request[10],
+                $request[11],
+                $request[12],
+                $request[13],
+                $request[14],
+            ];
+
+            $request->session()->put('headers', $arr);
+
+            return 'End';
         }
     }
 }

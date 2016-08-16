@@ -15,6 +15,7 @@ class CreateTempContactTable extends Migration
         Schema::create('contacts_temp', function(Blueprint $table){
             $table->increments('id');
             $table->integer('user_id',false,true);
+            $table->integer('number',false,true);
             $table->string('firstname')->nullable();
             $table->string('surname')->nullable();
             $table->string('state_of_origin')->nullable();

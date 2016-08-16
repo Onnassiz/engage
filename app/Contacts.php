@@ -44,6 +44,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Contacts whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Contacts whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $filter
+ * @method static \Illuminate\Database\Query\Builder|\App\Contacts whereFilter($value)
  */
 class Contacts extends Model
 {
@@ -51,7 +53,9 @@ class Contacts extends Model
 
     protected $fillable = [
         'key',
+        'number',
         'user_id',
+        'filter',
         'firstname',
         'surname',
         'state_of_origin',
