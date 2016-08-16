@@ -46,6 +46,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property string $filter
  * @method static \Illuminate\Database\Query\Builder|\App\Contacts whereFilter($value)
+ * @property integer $number
+ * @method static \Illuminate\Database\Query\Builder|\App\Contacts whereNumber($value)
  */
 class Contacts extends Model
 {

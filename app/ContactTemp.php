@@ -46,6 +46,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\ContactTemp whereTags($value)
  * @method static \Illuminate\Database\Query\Builder|\App\ContactTemp whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\ContactTemp whereUpdatedAt($value)
+ * @property integer $number
+ * @method static \Illuminate\Database\Query\Builder|\App\ContactTemp whereNumber($value)
  */
 class ContactTemp extends Model
 {

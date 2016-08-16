@@ -37,6 +37,15 @@ Route::get('/contacts/delete/{id}', 'ContactController@deleteContact');
 Route::get('/contacts/edit/{key}', 'ContactController@editContact');
 Route::post('/contacts/edit/{key}', 'ContactController@postEditContact');
 
+
+Route::get('/publications', 'Publications@home');
+Route::get('/publications/filter', 'Publications@filter');
+Route::get('/publications/postFilters', 'Publications@postFilters');
+Route::get('/publications/clear', 'Publications@clearFilters');
+Route::get('/publications/send', 'Publications@sendPublication');
+Route::post('/publications/send', 'Publications@postPublication');
+Route::get('/publications/history', 'Publications@publicationHistory');
+
 Route::get('/table', function(){
    return view('user.table');
 });
