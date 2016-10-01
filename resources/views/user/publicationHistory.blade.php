@@ -10,6 +10,9 @@ $viewData = [
 
 
     <div class="container page-body">
+        <h2 class="body-h2">Publications History</h2>
+        <h3 style="margin-top: 10px" class="body-h3">View your publication history</h3>
+        <hr class="intro-divider" style="margin-bottom: 50px">
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">Publication History</div>

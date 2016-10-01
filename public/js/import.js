@@ -80,7 +80,7 @@ $(document).ready(function(){
                         }
                     }
                 });
-            },i * 500);
+            },i * 300);
         });
     }
 });

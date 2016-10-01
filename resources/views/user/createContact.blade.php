@@ -87,10 +87,10 @@ $viewData = [
                 <div class="col-md-6">
                     <div style="padding-top: 35px">
                         <label class="radio-inline">
-                            <input <?php if(old('sex') == 'male') echo 'checked'?> type="radio" name="sex" value="male"> Male
+                            <input <?php if(old('sex') == 'Male') echo 'checked'?> type="radio" name="sex" value="Male"> Male
                         </label>
                         <label class="radio-inline">
-                            <input <?php if(old('sex') == 'female') echo 'checked'?> type="radio" name="sex" value="female"> Female
+                            <input <?php if(old('sex') == 'Female') echo 'checked'?> type="radio" name="sex" value="Female"> Female
                         </label><br>
                     </div>
                 </div>
@@ -266,7 +266,7 @@ $viewData = [
         $(function(){
             $('#org').autocomplete({
                 source:     "http://engage.dev/contacts/organization",
-                minLength:  2,
+                minLength:  1,
                 select:     function(event, ui){
                     $('#org').val(ui.item.value);
                 }

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Session;
+use Mail;
 
 
 class Publications extends Controller
@@ -27,7 +28,7 @@ class Publications extends Controller
     public function filter() {
 
         $organization = Organization::where('user_id', '=', Auth::user()->id)->orderBy('organization')->get();
-        $functions = Contacts::orderBy('rank')->groupBy('rank')->get();
+        $functions = Contacts::whereUserId(Auth::user()->id)->orderBy('rank')->groupBy('rank')->get();
 
 
         if(Session::has('organizations') or  Session::has('functions')){
@@ -113,7 +114,7 @@ class Publications extends Controller
                 return view('user.filter')->with('contacts', $contacts);
             }
         }else{
-            $contacts = Contacts::all('*');
+            $contacts = Contacts::whereUserId(Auth::user()->id)->get();
             Session::put('contacts', $contacts);
             return view('user.filter')->with('contacts', $contacts)->with('organization', $organization)->with('functions', $functions);
         }
@@ -135,6 +136,7 @@ class Publications extends Controller
             return response()->json();
         }
     }
+
 
     public function clearFilters() {
         Session::forget('organizations');
@@ -168,6 +170,14 @@ class Publications extends Controller
                 'contact_id'        => $contact->id,
                 'publication_id'    => $publication->id
             ]);
+            $user = [
+                'name'      => $contact->firstname.' '.$contact->surname,
+                'email'     => $contact->email_1,
+                'title'     => $publication->title,
+                'publication'   => $publication->publication,
+            ];
+
+            $this->sendMail($user);
         }
 
         Session::forget('contacts');
@@ -181,5 +191,30 @@ class Publications extends Controller
         $publications = Publication::whereUserId(Auth::user()->id)->get();
 
         return view('user.publicationHistory')->with('publications', $publications);
+    }
+
+    public function viewPublication($id) {
+        $recipients = [];
+        $publication = Publication::find($id);
+        if(!count($publication) or $publication->user_id != Auth::user()->id){
+            return redirect()->back();
+        }
+        $contactIds = PublicationsContacts::wherePublicationId($id)->get();
+
+        foreach($contactIds as $contactId){
+            $record = Contacts::find($contactId->contact_id);
+            $recipients[] = [$record->key, $record->firstname, $record->surname];
+        }
+
+        return view('user.viewPublication')->with('publication', $publication)->with('recipients', $recipients);
+    }
+
+    public function sendMail($user)
+    {
+        Mail::send('emails.publication', $user, function ($m) use ($user) {
+            $m->from('engage@app.com', 'Engage publication manager');
+
+            $m->to($user['email'], $user['name'])->subject($user['title']);
+        });
     }
 }

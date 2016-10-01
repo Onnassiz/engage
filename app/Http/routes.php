@@ -45,6 +45,7 @@ Route::get('/publications/clear', 'Publications@clearFilters');
 Route::get('/publications/send', 'Publications@sendPublication');
 Route::post('/publications/send', 'Publications@postPublication');
 Route::get('/publications/history', 'Publications@publicationHistory');
+Route::get('/publications/view/{id}', 'Publications@viewPublication');
 
 Route::get('/table', function(){
    return view('user.table');
